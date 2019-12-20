@@ -1,7 +1,7 @@
-1 užduotis
+--- 1 užduotis ---
 
-Aplikacija, kuri nuskaito nurodytame kataloge esančias programinio kodo bylas, suranda jose įrašytus komentarus ir išsaugo juos visus vienoje tekstinėje byloje.
+Aplikacija, kuri nuskaito nurodytame kataloge esančias programinio kodo bylas, suranda jose įrašytus 
+komentarus ir išsaugo juos visus vienoje tekstinėje byloje (comments.txt).
 
-Atlikta su Java
+Atlikta su Java (IntelliJ Idea, JDK 12)
 
-IJ Idea projektas
