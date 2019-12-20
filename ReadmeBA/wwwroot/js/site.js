@@ -9,10 +9,6 @@ function myFunction() {
     alert("//This is my string");
     //alert("this is my comment");
     /*alert("this is my comment");
-     
-     
-     
-     
-     
-     */alert("This is my string 2");
+     */
+    alert("This is my string 2");
 }

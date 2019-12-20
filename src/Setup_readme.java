@@ -1,50 +1,49 @@
+import java.util.*;
 import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class Setup_readme extends java.lang.Object{
 
-    static List<File> listFileTree(File dir) {
+    static List<File> listFile(File dir) {
+
         List<File> fileTree = new LinkedList();
-        if(dir==null||dir.listFiles()==null){
+
+        // In case of access error, list is null
+        if(dir==null||dir.listFiles()==null)
             return fileTree;
-        }
+
         for (File entry : dir.listFiles()) {
             if (entry.isFile()) fileTree.add(entry);
-            else fileTree.addAll(listFileTree(entry));
+            else fileTree.addAll(listFile(entry));
         }
         return fileTree;
     }
 
-    static void readComments(String path) throws IOException {
+    private static void readComments(String path) throws IOException {
 
         File root = new File(path);
-        File[] list = root.listFiles();
 
-        System.out.println(Arrays.toString(list));
+        List<File> list = listFile(root);
+
+        BufferedWriter writer = new BufferedWriter(new FileWriter("comments.txt"));
 
         Pattern pattern = Pattern.compile("(\\/\\/.*?(\\r?\\n|$))|(\\/\\*(?:[\\s\\S]*?)\\*\\/)" +
                 "|(\"(?:\\\\[^\\n]|[^\"\"\\n])*\")|(@(?:\"\"[^\"\"]*\"\")+)", Pattern.MULTILINE | Pattern.DOTALL);
 
         if (list != null) {  // In case of access error, list is null
+
             for (File f : list) {
                 if (f.isFile()) {
 
-                    System.out.println(f.getAbsoluteFile());
-
                     FileInputStream input = new FileInputStream(f.getAbsoluteFile());
+
+                    // read file with FileChannel
                     FileChannel channel = input.getChannel();
 
                     // Create a read-only CharBuffer on the file
@@ -53,32 +52,40 @@ public class Setup_readme extends java.lang.Object{
 
                     Matcher matcher = pattern.matcher(cbuf);
 
+                    List<String> comments = new LinkedList();
+
+                    //find only comments
                     while (matcher.find()) {
                         String match = matcher.group();
                         if (match.startsWith("/*") || match.startsWith("//")){
-                        System.out.println(match);}
+                            comments.add(match);
+                        }
                     }
+                    //write comments to file with writer
+                    if (comments.size()!=0) {
+                        writer.write("======="+f.getName()+"=======");
+                        writer.newLine();
+                        Iterator<String> iterator = comments.iterator();
+                        Integer num = 1; //numbering comments
 
+                        while(iterator.hasNext()){
+                            writer.write(num+". "+iterator.next());
+                            writer.newLine();
+                            num++;
+                        }
+                        writer.newLine();
+                    }
                 }
             }
+            writer.close();
         }
     }
 
 
     public static void main(String[] args) throws IOException {
 
-        String rootFolder = "c:\\JAVA_idea\\ba_it_challange\\ReadmeBA";
-
-//        File root = new File(rootFolder);
-//
-//        List<File> filesList = Setup_readme.listFileTree(root);
-//
-//        System.out.println("List of all files under " + rootFolder);
-//        System.out.println("------------------------------------");
-//        filesList.forEach(System.out::println);
-
-        Setup_readme.readComments(rootFolder); // this will take a while to run!
+        String rootFolder = "c:\\JAVA_idea\\it_challenge_readme\\ReadmeBA"; //root folder for comments reading
+        readComments(rootFolder);
     }
-
 
 }
