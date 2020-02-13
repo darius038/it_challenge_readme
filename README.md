@@ -3,5 +3,5 @@
 Aplikacija, kuri nuskaito nurodytame kataloge esančias programinio kodo bylas, suranda jose įrašytus 
 komentarus ir išsaugo juos visus vienoje tekstinėje byloje (comments.txt).
 
-Atlikta su Java (IntelliJ Idea, JDK 12)
+Atlikta su JAVA (Project - IntelliJ Idea, JDK 12)
 
